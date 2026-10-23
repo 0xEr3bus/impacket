@@ -224,6 +224,7 @@ def start_servers(options, threads):
         c.setAltName(options.altname)
         c.setAltSid(options.altSid)
         c.setHTTPS(options.https, options.certfile, options.keyfile)
+        c.setADFSOptions(options.adfs_wia_path, options.adfs_signon_path, options.adfs_user_agent)
 
         #If the redirect option is set, configure the HTTP server to redirect targets to SMB
         if server is HTTPRelayServer and options.r is not None:
@@ -467,6 +468,18 @@ if __name__ == '__main__':
     sccmdpoptions.add_argument('--sccm-dp', action='store_true', required=False, help='Enable SCCM Distribution Point attack. Perform package file dump from an SCCM Distribution Point. Expects as target \'http://<DP>/sms_dp_smspkg$/Datalib\'')
     sccmdpoptions.add_argument('--sccm-dp-extensions', action='store', required=False, help='A custom list of extensions to look for when downloading files from the SCCM Distribution Point. If not provided, defaults to .ps1,.bat,.xml,.txt,.pfx')
     sccmdpoptions.add_argument('--sccm-dp-files', action='store', required=False, help='The path to a file containing a list of specific URLs to download from the Distribution Point, instead of downloading by extensions. Providing this argument will skip file indexing')
+
+    adfsoptions = parser.add_argument_group("ADFS client options")
+    adfsoptions.add_argument('--adfs-wia-path', action='store', metavar='PATH', default='/adfs/ls/wia',
+                             help='AD FS Windows Integrated Authentication endpoint path (default: /adfs/ls/wia)')
+    adfsoptions.add_argument('--adfs-signon-path', action='store', metavar='PATH',
+                             default='/adfs/ls/idpinitiatedsignon.aspx',
+                             help='AD FS IdP-initiated sign-on endpoint used to bootstrap the sign-in context '
+                                  '(default: /adfs/ls/idpinitiatedsignon.aspx)')
+    adfsoptions.add_argument('--adfs-user-agent', action='store', metavar='USERAGENT',
+                             default='Mozilla/5.0 (MSIE 10.0; Windows NT 6.1; Trident/5.0)',
+                             help='User-Agent sent to AD FS so it selects Windows Integrated Authentication '
+                                  '(default: a Windows MSIE string)')
 
     try:
        options = parser.parse_args()

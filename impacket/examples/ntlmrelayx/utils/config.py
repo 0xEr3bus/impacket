@@ -97,6 +97,11 @@ class NTLMRelayxConfig:
         # HTTP options
         self.remove_target = False
 
+        # ADFS options
+        self.adfs_wia_path = '/adfs/ls/wia'
+        self.adfs_signon_path = '/adfs/ls/idpinitiatedsignon.aspx'
+        self.adfs_user_agent = 'Mozilla/5.0 (MSIE 10.0; Windows NT 6.1; Trident/5.0)'
+
         # WebDAV options
         self.serve_image = False
 
@@ -266,6 +271,11 @@ class NTLMRelayxConfig:
 
     def setWebDAVOptions(self, serve_image):
         self.serve_image = serve_image
+
+    def setADFSOptions(self, wia_path, signon_path, user_agent):
+        self.adfs_wia_path = wia_path
+        self.adfs_signon_path = signon_path
+        self.adfs_user_agent = user_agent
 
     def setADCSOptions(self, template):
         self.template = template
